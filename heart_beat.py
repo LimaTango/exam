@@ -6,21 +6,21 @@ from matplotlib import pyplot as plt
 file_in = open(sys.argv[1])
 data = []
 valid_data = []
-for line in file_in:
+for line in file_in:                                       # remove string row
     row = [i for i in line.split()]
     data.append(row)
-data.remove(data[0])
-for row in data:
+data.remove(data[0])                                    
+for row in data:                                           # remove invalid row(1) 
     new_row = [float(i) for i in row]
     if new_row[2] == 0:
         valid_data.append(new_row)
-array = np.asarray(valid_data)
+array = np.asarray(valid_data) 
 new_array = array.transpose()
 std = np.std(new_array[1])
-average = np.sum(new_array[1])/len(new_array[1])
+average = np.sum(new_array[1])/len(new_array[1])            # calculate maximum, minimum, average. 
 
 
-def time_control(start_time, duration):
+def time_control(start_time, duration):                     # chose a preiod of time to plot
     sub_time = []
     sub_val = []
     end_time = start_time + duration
@@ -31,7 +31,7 @@ def time_control(start_time, duration):
     return sub_time, sub_val
 
 
-def find_n(array):
+def find_n(array):                                          # the number of segments n
     n = 0
     end_day = array[0][-1]
     while n*15.0 < end_day:
@@ -39,7 +39,7 @@ def find_n(array):
     return n
 
 
-def segment(num):
+def segment(num):                                          # creat data for a segment
     array = []
     for i in range(num):
         start_time = i*15.0
@@ -49,18 +49,17 @@ def segment(num):
     return array
 
 n = find_n(new_array)
-seg_avg = segment(n)
-new_avg = np.sum(seg_avg)/len(seg_avg)
-time_array = np.array([i*15.0 for i in range(n)])
-time, val = time_control(3.0, 5.0)
-unique_array = np.unique(new_array[1])
+seg_avg = segment(n)                                       # list of average value of segment 
+time_array = np.array([i*15.0 for i in range(n)])          # list of time 
+time, val = time_control(3.0, 5.0)                         # time , and value list of chosen period
+unique_array = np.unique(new_array[1])                     # average value of histogram
 identity = float(len(unique_array))
-total = float(len(new_array[1]))
+total = float(len(new_array[1]))                             
 hist_avg = total/identity
-avg_list = [hist_avg, hist_avg]
+avg_list = [hist_avg, hist_avg]                            # list to plot histogram average
 time_list = [new_array[0][0], new_array[0][-1]]
 
-if __name__ == "__main__":
+if __name__ == "__main__":                     
     print "max value", max(new_array[1])
     print "min value", min(new_array[1])
     print "average", average
